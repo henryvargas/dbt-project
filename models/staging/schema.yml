@@ -1,0 +1,22 @@
+version: 2
+
+models:
+  - name: stg_customers
+    description: "Datos limpios de clientes"
+    columns:
+      - name: customer_id
+        tests:
+          - unique
+          - not_null
+
+  - name: stg_products
+    description: "Datos limpios de productos"
+
+  - name: stg_orders
+    description: "Datos limpios de órdenes"
+
+  - name: stg_order_items
+    description: "Items de órdenes limpios"
+
+  - name: stg_web_events
+    description: "Eventos web normalizados"
