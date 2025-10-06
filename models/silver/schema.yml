@@ -7,14 +7,18 @@ models:
       - name: customer_id
         description: "ID único del cliente"
         tests:
-          - unique
           - not_null
+          - unique
       - name: email
         description: "Correo electrónico del cliente"
         tests:
           - not_null
+          - unique
       - name: segment
         description: "Segmento del cliente"
+        tests:
+          - accepted_values:
+              values: ['A', 'B', 'C', 'Unknown']
 
   - name: dim_products
     description: "Tabla de productos limpia y normalizada"
@@ -22,14 +26,16 @@ models:
       - name: product_id
         description: "ID único del producto"
         tests:
-          - unique
           - not_null
+          - unique
       - name: price
         description: "Precio del producto"
         tests:
           - not_null
       - name: category
         description: "Categoría del producto"
+        tests:
+          - not_null
 
   - name: fact_orders
     description: "Tabla de hechos combinando órdenes y detalles de órdenes"
@@ -37,26 +43,24 @@ models:
       - name: order_id
         description: "ID de la orden"
         tests:
-          - unique
           - not_null
+          - unique
       - name: customer_id
         description: "ID del cliente"
         tests:
           - not_null
           - relationships:
-              arguments:
-                to: ref('dim_customers')
-                field: customer_id
+              to: ref('dim_customers')
+              field: customer_id
       - name: product_id
         description: "ID del producto"
         tests:
           - not_null
           - relationships:
-              arguments:
-                to: ref('dim_products')
-                field: product_id
+              to: ref('dim_products')
+              field: product_id
       - name: total_amount
-        description: "Monto total calculado de la orden"
+        description: "Monto total de la orden"
         tests:
           - not_null
 
@@ -66,20 +70,20 @@ models:
       - name: session_id
         description: "ID de la sesión"
         tests:
-          - unique
           - not_null
+          - unique
       - name: customer_id
         description: "ID del cliente asociado"
         tests:
           - relationships:
-              arguments:
-                to: ref('dim_customers')
-                field: customer_id
-      - name: event_timestamp
-        description: "Momento del evento"
-        tests:
-          - not_null
+              to: ref('dim_customers')
+              field: customer_id
       - name: event_type
         description: "Tipo de evento"
+        tests:
+          - accepted_values:
+              values: ['page_view', 'click', 'purchase', 'unknown']
+      - name: event_timestamp
+        description: "Momento del evento"
         tests:
           - not_null
